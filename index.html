@@ -1,44 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Vultures 2</title>
+  <meta charset="UTF-8" />
+  <title>Vultures 2 - Audio Stack</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Sometype+Mono&display=swap');
 
-    * {
-      box-sizing: border-box;
-      font-family: 'Sometype Mono', monospace;
-    }
-
     body {
-      margin: 0;
-      padding: 40px;
-      background: #fff;
+      background-color: #fff;
       color: #000;
+      font-family: 'Sometype Mono', monospace;
+      font-size: 12px;
       display: flex;
       justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
     }
 
     #playlist {
       display: flex;
       flex-direction: column;
-      align-items: center;
       gap: 20px;
       width: 100%;
-      max-width: 700px;
+      max-width: 600px;
     }
 
     .track {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
-      width: 100%;
     }
 
     .track-title {
       width: 200px;
-      font-size: 12px;
       text-align: right;
     }
 
@@ -49,158 +45,126 @@
     }
 
     input[type="range"] {
-      flex: 1;
-      cursor: pointer;
       accent-color: #000;
-    }
-
-    .time {
-      width: 80px;
-      font-size: 12px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
+
   <div id="playlist"></div>
 
   <script>
-    const base = "YOUR_HOST_URL_HERE/"; // Replace with your actual base URL
-
     const tracks = [
-      "SLIDE.mp3",
-      "TIME MOVING SLOW.mp3",
-      "FIELD TRIP.mp3",
-      "FRIED.mp3",
-      "ISABELLA.mp3",
-      "PROMOTION.mp3",
-      "530.mp3",
-      "DEAD.mp3",
-      "FOREVER ROLLING.mp3",
-      "BOMB.mp3",
-      "RIVER.mp3",
-      "FOREVER.mp3",
-      "HUSBAND.mp3",
-      "LIFESTYLE.mp3",
-      "SKY CITY.mp3",
-      "MY SOUL.mp3",
-      // Bonus
-      "BELIEVER.mp3",
-      "CAN U BE.mp3",
-      "DRUNK.mp3",
-      "GUN TO MY HEAD.mp3",
-      "TAKE OFF YOUR DRESS.mp3"
+      { title: 'Slide', file: 'SLIDE.mp3' },
+      { title: 'Time Moving Slow', file: 'TIME MOVING SLOW.mp3' },
+      { title: 'Field Trip', file: 'FIELD TRIP.mp3' },
+      { title: 'Fried', file: 'FRIED.mp3' },
+      { title: 'Isabella', file: 'ISABELLA.mp3' },
+      { title: 'Promotion', file: 'PROMOTION.mp3' },
+      { title: '530', file: '530.mp3' },
+      { title: 'Dead', file: 'DEAD.mp3' },
+      { title: 'Forever Rolling', file: 'FOREVER ROLLING.mp3' },
+      { title: 'Bomb', file: 'BOMB.mp3' },
+      { title: 'River', file: 'RIVER.mp3' },
+      { title: 'Forever', file: 'FOREVER.mp3' },
+      { title: 'Husband', file: 'HUSBAND.mp3' },
+      { title: 'Lifestyle', file: 'LIFESTYLE.mp3' },
+      { title: 'Sky City', file: 'SKY CITY.mp3' },
+      { title: 'My Soul', file: 'MY SOUL.mp3' },
+      // Bonus Tracks
+      { title: 'BELIEVER', file: 'BELIEVER.mp3' },
+      { title: 'CAN U BE', file: 'CAN U BE.mp3' },
+      { title: 'DRUNK', file: 'DRUNK.mp3' },
+      { title: 'GUN TO MY HEAD', file: 'GUN TO MY HEAD.mp3' },
+      { title: 'TAKE OFF YOUR DRESS', file: 'TAKE OFF YOUR DRESS.mp3' }
     ];
 
-    const titles = [
-      "Slide",
-      "Time Moving Slow",
-      "Field Trip",
-      "Fried",
-      "Isabella",
-      "Promotion",
-      "530",
-      "Dead",
-      "Forever Rolling",
-      "Bomb",
-      "River",
-      "Forever",
-      "Husband",
-      "Lifestyle",
-      "Sky City",
-      "My Soul",
-      // Bonus
-      "BELIEVER",
-      "CAN U BE",
-      "DRUNK",
-      "GUN TO MY HEAD",
-      "TAKE OFF YOUR DRESS"
-    ];
-
-    const playlist = document.getElementById("playlist");
+    const playlist = document.getElementById('playlist');
     const audioElements = [];
 
-    tracks.forEach((file, index) => {
-      const wrapper = document.createElement("div");
-      wrapper.className = "track";
+    tracks.forEach((track, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'track';
 
-      const title = document.createElement("div");
-      title.className = "track-title";
-      title.textContent = titles[index];
+      const title = document.createElement('div');
+      title.className = 'track-title';
+      title.textContent = track.title;
 
-      const button = document.createElement("div");
-      button.className = "play-pause";
-      button.textContent = "⏵";
+      const button = document.createElement('div');
+      button.className = 'play-pause';
+      button.textContent = '⏵';
 
-      const audio = new Audio(base + file);
-      audio.preload = "metadata";
-      audio.crossOrigin = "anonymous";
+      const audio = new Audio(track.file);
       audioElements.push(audio);
 
-      const progress = document.createElement("input");
-      progress.type = "range";
+      const progress = document.createElement('input');
+      progress.type = 'range';
       progress.min = 0;
-      progress.step = 1;
       progress.value = 0;
+      progress.step = 1;
+      progress.style.width = '200px';
 
-      const time = document.createElement("div");
-      time.className = "time";
-      time.textContent = "0:00 / 0:00";
+      const timeLabel = document.createElement('div');
+      timeLabel.style.minWidth = '75px';
+      timeLabel.textContent = '0:00 / 0:00';
 
-      const formatTime = (s) => {
-        const m = Math.floor(s / 60);
-        const sec = Math.floor(s % 60);
-        return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+      const formatTime = (secs) => {
+        const m = Math.floor(secs / 60);
+        const s = Math.floor(secs % 60);
+        return `${m}:${s < 10 ? '0' + s : s}`;
       };
 
-      audio.addEventListener("loadedmetadata", () => {
-        progress.max = audio.duration;
-        time.textContent = `0:00 / ${formatTime(audio.duration)}`;
-      });
-
-      audio.addEventListener("timeupdate", () => {
+      audio.addEventListener('timeupdate', () => {
         progress.value = audio.currentTime;
-        time.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+        timeLabel.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
       });
 
-      progress.addEventListener("input", () => {
+      audio.addEventListener('loadedmetadata', () => {
+        progress.max = audio.duration;
+        timeLabel.textContent = `0:00 / ${formatTime(audio.duration)}`;
+      });
+
+      progress.addEventListener('input', () => {
         audio.currentTime = progress.value;
       });
 
-      audio.addEventListener("ended", () => {
-        button.textContent = "⏵";
+      audio.addEventListener('ended', () => {
         audio.currentTime = 0;
+        button.textContent = '⏵';
         const next = audioElements[index + 1];
-        const nextBtn = playlist.querySelectorAll(".play-pause")[index + 1];
+        const nextBtn = playlist.querySelectorAll('.play-pause')[index + 1];
         if (next && nextBtn) {
           next.play();
-          nextBtn.textContent = "⏸";
+          nextBtn.textContent = '⏸';
         }
       });
 
-      button.addEventListener("click", () => {
+      button.addEventListener('click', () => {
         audioElements.forEach((a, i) => {
           if (a !== audio) {
             a.pause();
             a.currentTime = 0;
-            playlist.querySelectorAll(".play-pause")[i].textContent = "⏵";
+            playlist.querySelectorAll('.play-pause')[i].textContent = '⏵';
           }
         });
 
         if (audio.paused) {
           audio.play();
-          button.textContent = "⏸";
+          button.textContent = '⏸';
         } else {
           audio.pause();
-          button.textContent = "⏵";
+          button.textContent = '⏵';
         }
       });
 
       wrapper.appendChild(title);
       wrapper.appendChild(button);
       wrapper.appendChild(progress);
-      wrapper.appendChild(time);
+      wrapper.appendChild(timeLabel);
       playlist.appendChild(wrapper);
     });
   </script>
+
 </body>
 </html>
