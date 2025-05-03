@@ -2,31 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Vultures 2 – Player</title>
+  <title>Vultures 2</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Sometype+Mono&display=swap');
 
     * {
-      font-family: 'Sometype Mono', monospace;
       box-sizing: border-box;
+      font-family: 'Sometype Mono', monospace;
     }
 
     body {
-      background: #fff;
-      color: #000;
+      margin: 0;
       padding: 40px;
+      background-color: #fff;
+      color: #000;
+      display: flex;
+      justify-content: center;
+    }
+
+    #playlist {
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 700px;
     }
 
     .track {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 20px;
       width: 100%;
-      max-width: 700px;
     }
 
     .track-title {
@@ -55,7 +62,6 @@
   </style>
 </head>
 <body>
-  <h1 style="margin-bottom: 40px;">Vultures 2</h1>
   <div id="playlist"></div>
 
   <script>
@@ -93,7 +99,10 @@
       button.className = 'play-pause';
       button.textContent = '⏵';
 
-      const audio = new Audio(track.file);
+      const audio = document.createElement('audio');
+      audio.src = track.file;
+      audio.preload = 'metadata';
+
       audioElements.push(audio);
 
       const progress = document.createElement('input');
@@ -131,7 +140,7 @@
         audio.currentTime = 0;
         const next = audioElements[index + 1];
         const nextBtn = playlist.querySelectorAll('.play-pause')[index + 1];
-        if (next) {
+        if (next && nextBtn) {
           next.play();
           nextBtn.textContent = '⏸';
         }
@@ -159,6 +168,7 @@
       wrapper.appendChild(button);
       wrapper.appendChild(progress);
       wrapper.appendChild(time);
+      wrapper.appendChild(audio);
       playlist.appendChild(wrapper);
     });
   </script>
