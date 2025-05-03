@@ -1,176 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Vultures 2</title>
+  <meta charset="UTF-8">
+  <title>Vultures 2 Player</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Sometype+Mono&display=swap');
-
-    * {
-      box-sizing: border-box;
-      font-family: 'Sometype Mono', monospace;
-    }
 
     body {
       margin: 0;
       padding: 40px;
-      background-color: #fff;
+      font-family: 'Sometype Mono', monospace;
+      background: #fff;
       color: #000;
       display: flex;
       justify-content: center;
     }
 
-    #playlist {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
+    .container {
       width: 100%;
       max-width: 700px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
     }
 
     .track {
       display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .track-title {
-      width: 200px;
       font-size: 12px;
-      text-align: right;
+      margin-bottom: 8px;
     }
 
-    .play-pause {
-      font-size: 20px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    input[type="range"] {
-      flex: 1;
-      cursor: pointer;
-      accent-color: #000;
-    }
-
-    .time {
-      width: 80px;
-      text-align: left;
-      font-size: 12px;
+    audio {
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <div id="playlist"></div>
-
-  <script>
-    const tracks = [
-      { title: "Slide", file: "https://archive.org/download/vul2uresv111/01%20Slide.mp3" },
-      { title: "Time Moving Slow", file: "https://archive.org/download/vul2uresv111/02%20Time%20Moving%20Slow.mp3" },
-      { title: "Field Trip", file: "https://archive.org/download/vul2uresv111/03%20Field%20Trip.mp3" },
-      { title: "Fried", file: "https://archive.org/download/vul2uresv111/04%20Fried.mp3" },
-      { title: "Isabella", file: "https://archive.org/download/vul2uresv111/05%20Isabella.mp3" },
-      { title: "Promotion", file: "https://archive.org/download/vul2uresv111/06%20Promotion.mp3" },
-      { title: "530", file: "https://archive.org/download/vul2uresv111/07%20530.mp3" },
-      { title: "Dead", file: "https://archive.org/download/vul2uresv111/08%20Dead.mp3" },
-      { title: "Forever Rolling", file: "https://archive.org/download/vul2uresv111/09%20Forever%20Rolling.mp3" },
-      { title: "Bomb", file: "https://archive.org/download/vul2uresv111/10%20Bomb.mp3" },
-      { title: "River", file: "https://archive.org/download/vul2uresv111/11%20River.mp3" },
-      { title: "Forever", file: "https://archive.org/download/vul2uresv111/12%20Forever.mp3" },
-      { title: "Husband", file: "https://archive.org/download/vul2uresv111/13%20Husband.mp3" },
-      { title: "Lifestyle", file: "https://archive.org/download/vul2uresv111/14%20Lifestyle.mp3" },
-      { title: "Sky City", file: "https://archive.org/download/vul2uresv111/15%20Sky%20City.mp3" },
-      { title: "My Soul", file: "https://archive.org/download/vul2uresv111/16%20My%20Soul.mp3" }
-    ];
-
-    const playlist = document.getElementById('playlist');
-    const audioElements = [];
-
-    tracks.forEach((track, index) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'track';
-
-      const title = document.createElement('div');
-      title.className = 'track-title';
-      title.textContent = track.title;
-
-      const button = document.createElement('div');
-      button.className = 'play-pause';
-      button.textContent = '⏵';
-
-      const audio = document.createElement('audio');
-      audio.src = track.file;
-      audio.preload = 'metadata';
-
-      audioElements.push(audio);
-
-      const progress = document.createElement('input');
-      progress.type = 'range';
-      progress.min = 0;
-      progress.step = 1;
-      progress.value = 0;
-
-      const time = document.createElement('div');
-      time.className = 'time';
-      time.textContent = '0:00 / 0:00';
-
-      const formatTime = (s) => {
-        const m = Math.floor(s / 60);
-        const sec = Math.floor(s % 60);
-        return `${m}:${sec < 10 ? '0' : ''}${sec}`;
-      };
-
-      audio.addEventListener('loadedmetadata', () => {
-        progress.max = audio.duration;
-        time.textContent = `0:00 / ${formatTime(audio.duration)}`;
-      });
-
-      audio.addEventListener('timeupdate', () => {
-        progress.value = audio.currentTime;
-        time.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
-      });
-
-      progress.addEventListener('input', () => {
-        audio.currentTime = progress.value;
-      });
-
-      audio.addEventListener('ended', () => {
-        button.textContent = '⏵';
-        audio.currentTime = 0;
-        const next = audioElements[index + 1];
-        const nextBtn = playlist.querySelectorAll('.play-pause')[index + 1];
-        if (next && nextBtn) {
-          next.play();
-          nextBtn.textContent = '⏸';
-        }
-      });
-
-      button.addEventListener('click', () => {
-        audioElements.forEach((a, i) => {
-          if (a !== audio) {
-            a.pause();
-            a.currentTime = 0;
-            playlist.querySelectorAll('.play-pause')[i].textContent = '⏵';
-          }
-        });
-
-        if (audio.paused) {
-          audio.play();
-          button.textContent = '⏸';
-        } else {
-          audio.pause();
-          button.textContent = '⏵';
-        }
-      });
-
-      wrapper.appendChild(title);
-      wrapper.appendChild(button);
-      wrapper.appendChild(progress);
-      wrapper.appendChild(time);
-      wrapper.appendChild(audio);
-      playlist.appendChild(wrapper);
-    });
-  </script>
-</body>
-</html>
+  <div class="container">
+    <div class="track">
+      <div class="track-title">Slide</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/01%20Slide.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Time Moving Slow</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/02%20Time%20Moving%20Slow.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Field Trip</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/03%20Field%20Trip.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Fried</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/04%20Fried.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Isabella</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/05%20Isabella.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Promotion</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/06%20Promotion.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">530</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/07%20530.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Dead</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/08%20Dead.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Forever Rolling</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/09%20Forever%20Rolling.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Bomb</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/10%20Bomb.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">River</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/11%20River.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Forever</div>
+      <audio controls src="https://archive.org/download/vul2uresv111/12%20Forever.mp3"></audio>
+    </div>
+    <div class="track">
+      <div class="track-title">Husband</div>
