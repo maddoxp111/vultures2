@@ -65,43 +65,49 @@
   <div id="playlist"></div>
 
   <script>
+    const baseURL = "https://dn721802.ca.archive.org/0/items/vul2uresv111/vultures-2/";
     const tracks = [
-      { title: "Slide", file: "https://archive.org/download/vul2uresv111/01%20Slide.mp3" },
-      { title: "Time Moving Slow", file: "https://archive.org/download/vul2uresv111/02%20Time%20Moving%20Slow.mp3" },
-      { title: "Field Trip", file: "https://archive.org/download/vul2uresv111/03%20Field%20Trip.mp3" },
-      { title: "Fried", file: "https://archive.org/download/vul2uresv111/04%20Fried.mp3" },
-      { title: "Isabella", file: "https://archive.org/download/vul2uresv111/05%20Isabella.mp3" },
-      { title: "Promotion", file: "https://archive.org/download/vul2uresv111/06%20Promotion.mp3" },
-      { title: "530", file: "https://archive.org/download/vul2uresv111/07%20530.mp3" },
-      { title: "Dead", file: "https://archive.org/download/vul2uresv111/08%20Dead.mp3" },
-      { title: "Forever Rolling", file: "https://archive.org/download/vul2uresv111/09%20Forever%20Rolling.mp3" },
-      { title: "Bomb", file: "https://archive.org/download/vul2uresv111/10%20Bomb.mp3" },
-      { title: "River", file: "https://archive.org/download/vul2uresv111/11%20River.mp3" },
-      { title: "Forever", file: "https://archive.org/download/vul2uresv111/12%20Forever.mp3" },
-      { title: "Husband", file: "https://archive.org/download/vul2uresv111/13%20Husband.mp3" },
-      { title: "Lifestyle", file: "https://archive.org/download/vul2uresv111/14%20Lifestyle.mp3" },
-      { title: "Sky City", file: "https://archive.org/download/vul2uresv111/15%20Sky%20City.mp3" },
-      { title: "My Soul", file: "https://archive.org/download/vul2uresv111/16%20My%20Soul.mp3" }
+      "01-slide.flac",
+      "02-time-moving-slow.flac",
+      "03-field-trip.flac",
+      "04-fried.flac",
+      "05-isabella.flac",
+      "06-promotion.flac",
+      "07-530.flac",
+      "08-dead.flac",
+      "09-forever-rolling.flac",
+      "10-bomb.flac",
+      "11-river.flac",
+      "12-forever.flac",
+      "13-husband.flac",
+      "14-lifestyle.flac",
+      "15-sky-city.flac",
+      "16-my-soul.flac"
+    ];
+
+    const titles = [
+      "Slide", "Time Moving Slow", "Field Trip", "Fried", "Isabella", "Promotion", "530", "Dead",
+      "Forever Rolling", "Bomb", "River", "Forever", "Husband", "Lifestyle", "Sky City", "My Soul"
     ];
 
     const playlist = document.getElementById('playlist');
     const audioElements = [];
 
-    tracks.forEach((track, index) => {
+    tracks.forEach((file, index) => {
       const wrapper = document.createElement('div');
       wrapper.className = 'track';
 
       const title = document.createElement('div');
       title.className = 'track-title';
-      title.textContent = track.title;
+      title.textContent = titles[index];
 
       const button = document.createElement('div');
       button.className = 'play-pause';
       button.textContent = '⏵';
 
-      const audio = new Audio(track.file);
+      const audio = new Audio(baseURL + file);
+      audio.preload = 'metadata';
       audio.crossOrigin = "anonymous";
-      audio.preload = "metadata";
       audioElements.push(audio);
 
       const progress = document.createElement('input');
