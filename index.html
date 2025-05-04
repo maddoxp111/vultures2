@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>Vultures 2 - Audio Stack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sometype+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sometype+Mono&display=swap');
-
     body {
       background-color: #fff;
       color: #000;
@@ -39,7 +39,7 @@
     }
 
     .play-pause {
-      font-size: 20px;
+      font-size: 24px;
       cursor: pointer;
       user-select: none;
     }
@@ -72,7 +72,6 @@
       { title: 'LIFESTYLE', file: 'LIFESTYLE.mp3' },
       { title: 'SKY CITY', file: 'SKY CITY.mp3' },
       { title: 'MY SOUL', file: 'MY SOUL.mp3' },
-      // Bonus Tracks
       { title: 'BELIEVER', file: 'BELIEVER.mp3' },
       { title: 'CAN U BE', file: 'CAN U BE.mp3' },
       { title: 'DRUNK', file: 'DRUNK.mp3' },
@@ -93,7 +92,7 @@
 
       const button = document.createElement('div');
       button.className = 'play-pause';
-      button.textContent = '⏵';
+      button.innerHTML = '<i class="material-icons">play_arrow</i>';
 
       const audio = new Audio(track.file);
       audioElements.push(audio);
@@ -131,12 +130,12 @@
 
       audio.addEventListener('ended', () => {
         audio.currentTime = 0;
-        button.textContent = '⏵';
+        button.innerHTML = '<i class="material-icons">play_arrow</i>';
         const next = audioElements[index + 1];
         const nextBtn = playlist.querySelectorAll('.play-pause')[index + 1];
         if (next && nextBtn) {
           next.play();
-          nextBtn.textContent = '⏸';
+          nextBtn.innerHTML = '<i class="material-icons">pause</i>';
         }
       });
 
@@ -145,16 +144,16 @@
           if (a !== audio) {
             a.pause();
             a.currentTime = 0;
-            playlist.querySelectorAll('.play-pause')[i].textContent = '⏵';
+            playlist.querySelectorAll('.play-pause')[i].innerHTML = '<i class="material-icons">play_arrow</i>';
           }
         });
 
         if (audio.paused) {
           audio.play();
-          button.textContent = '⏸';
+          button.innerHTML = '<i class="material-icons">pause</i>';
         } else {
           audio.pause();
-          button.textContent = '⏵';
+          button.innerHTML = '<i class="material-icons">play_arrow</i>';
         }
       });
 
@@ -165,6 +164,5 @@
       playlist.appendChild(wrapper);
     });
   </script>
-
 </body>
 </html>
